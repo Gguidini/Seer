@@ -50,7 +50,7 @@ function App() {
       
       const cell = model.getCell(ent)
       const {x, y, width, height, value, style} = currStep[ent]
-      const cleanValue = value.match(/>(.*)</)
+      const cleanValue = value ? value.match(/>(.*)</) : ''
       if (cell) {
         // Entity already there, just update
         cell.geometry.x = x

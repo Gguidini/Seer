@@ -5,7 +5,7 @@ export const simulation = {
     steps: [{}]
 }
 
-fs.readFile('./assets/report.txt', (err, data) => {
+fs.readFile('./assets/report.json', (err, data) => {
     if (err) {
         console.log(`Didn't read the file correctly!!!`)
     }
