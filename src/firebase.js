@@ -1,3 +1,6 @@
+import firebase from 'firebase';
+import 'firebase/database';
+
 const firebaseConfig = {
   apiKey: "AIzaSyBJ40d8bNo2x_reFNjfxCUinALH24Rzh9Y",
   authDomain: "seer-3ec9b.firebaseapp.com",
@@ -10,10 +13,9 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
 const database = firebase.database()
 
 const live_report = database.ref('live_report/')
 
-export  { live_report } 
+export { live_report }

@@ -1,6 +1,11 @@
-import { live_report } from "./firebase_client.js";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
 
-live_report.on('value', (snapshot) => {
-  const data = snapshot.val()
-  console.log(data)
-})
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
