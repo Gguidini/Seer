@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Simulator from '../../components/simulator';
 import firebase from '../../services/firebase';
 import './index.css';
 
@@ -24,8 +25,9 @@ function Home() {
     <div className="Home">
       <header className="Home-header">
         <h1>Simulador</h1>
-        {dataList.map((data) => (
-          <p>{JSON.stringify(data)}</p>
+        <Simulator data={dataList}/>
+        {dataList.map((data, index) => (
+          <p key={index}>{JSON.stringify(data)}</p>
         ))}
       </header>
     </div>
