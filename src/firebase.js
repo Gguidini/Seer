@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-import 'firebase/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJ40d8bNo2x_reFNjfxCUinALH24Rzh9Y",
@@ -14,8 +13,4 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-const database = firebase.database()
-
-const live_report = database.ref('live_report/')
-
-export { live_report }
+export default firebase;
