@@ -12,7 +12,7 @@ function Home() {
         
     const listener = live_report.on('value', (snapshot) => {
       if(snapshot === undefined) return;
-      const data = snapshot.val()? snapshot.val() : [{}];
+      const data = snapshot.val()? snapshot.val() : [undefined, []];
       setDetails(data[0]);
       setSteps(data.slice(1))
     })
