@@ -18,7 +18,7 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
 
-file = open('report_paths.json', 'r')
+file = open('report_pois.json', 'r')
 
 # delete previous data in test
 try:
