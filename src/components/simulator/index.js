@@ -19,13 +19,19 @@ registerFloorplanWallU(mx.mxUtils, mx.mxCellRenderer, mx.mxShape);
 registerFloorplanWall(mx.mxUtils, mx.mxCellRenderer, mx.mxShape);
 registerFloorplanRoom(mx.mxUtils, mx.mxCellRenderer, mx.mxShape);
 
-function Simulator( { details, steps } ) {
+function Simulator( { details, steps, user } ) {
   const [step, updateStep] = useState(-1)
   const [timestamp, updateTimestamp] = useState()
   const [title, updateTitle] = useState("")
   const [maxStep, updateMaxStep] = useState(0)
   const [running, updateRunning] = useState(false)
   const [playInterval, updatePlayInterval] = useState(undefined)
+
+  useEffect(() => {
+    updateStep(-1);
+    document.getElementById('mxContainer').textContent = '';
+    graph = undefined;
+  }, [user])
 
   const processStep = (currStep) => {
     if (graph !== undefined){
