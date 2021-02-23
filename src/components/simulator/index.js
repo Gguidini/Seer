@@ -1,4 +1,4 @@
-import { FaStepForward, FaStepBackward, FaPlayCircle, FaStopCircle } from 'react-icons/fa'
+import { FaFastForward, FaFastBackward, FaStepForward, FaStepBackward, FaPlayCircle, FaStopCircle } from 'react-icons/fa'
 
 import factory from 'mxgraph'
 import { useEffect, useState } from 'react'
@@ -149,6 +149,13 @@ function Simulator( { details, steps, user } ) {
       <p>TimeStamp: {timestamp} • Step: {step}/{maxStep}</p>
       <button 
         className="control"
+        disabled={step-10 < 0}
+        onClick={() => updateStep(step => step - 10)}
+        >
+        <FaFastBackward />
+      </button>
+      <button 
+        className="control"
         disabled={step === 0 || step === -1}
         onClick={() => updateStep(step => step -1)}
         >
@@ -171,6 +178,13 @@ function Simulator( { details, steps, user } ) {
         onClick={() => updateStep(step => step + 1)}
         >
         <FaStepForward />
+      </button>
+      <button 
+        className="control"
+        disabled={step+10 > maxStep || maxStep === 0 || step === -1}
+        onClick={() => updateStep(step => step + 10)}
+        >
+        <FaFastForward />
       </button>
 
       <div id="mxContainer" />
