@@ -27,31 +27,59 @@ function Simulator( { details, steps } ) {
   const [running, updateRunning] = useState(false)
   const [playInterval, updatePlayInterval] = useState(undefined)
 
-
   const processStep = (currStep) => {
     if (graph !== undefined){
       const model = graph?.getModel()
       const parent = graph?.getDefaultParent();
       updateTimestamp(currStep?.timestamp)
       model.beginUpdate()
+      if(step === 0){
+        for (const idx in currStep) {
+          const objeto = Object.entries(currStep[idx]);
+          const aux = objeto[0];
 
-      for (const ent in currStep) {
-  
-        if(!currStep.hasOwnProperty(ent) || ent === 'timestamp') continue
-        
-        const cell = model.getCell(ent)
-        const {x, y, width, height, value, style} = currStep[ent]
-        const cleanValue = value ? value.match(/>(.*)</) : ''
-        if (cell) {
-          // Entity already there, just update
-          cell.geometry.x = x
-          cell.geometry.y = y
-          cell.geometry.width = width
-          cell.geometry.height = height
-          cell.value = cleanValue ? cleanValue[1] : value
-          cell.style = style
-        } else {
-          graph.insertVertex(parent, ent, cleanValue ? cleanValue[1] : value, x, y, width, height, style)
+          if(aux[0] === 'timestamp') continue
+
+          const cell = model.getCell(aux[0])
+          const {x, y, width, height, value, style} = aux[1]
+          const cleanValue = value ? value.match(/>(.*)</) : ''
+          if (cell) {
+            // Entity already there, just update
+            cell.geometry.x = x
+            cell.geometry.y = y
+            cell.geometry.width = width
+            cell.geometry.height = height
+            cell.value = cleanValue ? cleanValue[1] : value
+            cell.style = style
+          } else {
+            graph.insertVertex(parent, aux[0], cleanValue ? cleanValue[1] : value, x, y, width, height, style)
+          }
+
+        }
+      }
+      else {
+        for (const ent in currStep) {
+          if(!currStep.hasOwnProperty(ent) || ent === 'timestamp') continue
+          const cell = model.getCell(ent)
+          const {x, y, width, height, value, style} = currStep[ent]
+          const cleanValue = value ? value.match(/>(.*)</) : ''
+          if(ent === 'deleted') {
+
+              const remove = model.getCell(currStep[ent][0]);
+              remove.style = "display:none;"
+            
+          }
+          if (cell) {
+            // Entity already there, just update
+            cell.geometry.x = x
+            cell.geometry.y = y
+            cell.geometry.width = width
+            cell.geometry.height = height
+            cell.value = cleanValue ? cleanValue[1] : value
+            cell.style = style
+          } else {
+            graph.insertVertex(parent, ent, cleanValue ? cleanValue[1] : value, x, y, width, height, style)
+          }
         }
       }
       model.endUpdate()
@@ -73,6 +101,8 @@ function Simulator( { details, steps } ) {
   useEffect(() => {
     if(details === undefined) {
       updateStep(-1);
+      document.getElementById('mxContainer').textContent = '';
+      graph = undefined;
     }
     if(details !== undefined) {
       const container = document.getElementById('mxContainer')
@@ -105,7 +135,6 @@ function Simulator( { details, steps } ) {
     return () => clearInterval(playInterval)
   }, [running, playInterval])
 
-
   return (
   <div id="Simulator">
       <h2>
@@ -114,7 +143,7 @@ function Simulator( { details, steps } ) {
       <p>TimeStamp: {timestamp} • Step: {step}/{maxStep}</p>
       <button 
         className="control"
-        disabled={step === 0}
+        disabled={step === 0 || step === -1}
         onClick={() => updateStep(step => step -1)}
         >
         < FaStepBackward />
@@ -132,7 +161,7 @@ function Simulator( { details, steps } ) {
 
       <button 
         className="control"
-        disabled={step === maxStep}
+        disabled={step === maxStep || maxStep === 0}
         onClick={() => updateStep(step => step + 1)}
         >
         <FaStepForward />
