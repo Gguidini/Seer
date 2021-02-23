@@ -18,11 +18,11 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
 
-file = open('report_pois.json', 'r')
+file = open('report_paths.json', 'r')
 
-# delete previous data in test
+#delete previous data in test
 try:
-  db.child('live_report').remove()
+  db.child("gabriel").child('live_report').remove()
 except:
   print('didn`t need to remove previous database')
 
@@ -30,7 +30,11 @@ time_start = datetime.datetime.now()
 print(f"started at {time_start}")
 for index, line in enumerate(file):
   json_data = json.loads(line)
-  db.child('live_report').child(index).set(json_data)
+  if index == 1:
+    for idx, j in enumerate(json_data):
+      db.child("gabriel").child('live_report').child(index).child(idx).set({j: json_data[j]})
+  else:
+    db.child("gabriel").child('live_report').child(index).set(json_data)
 
 time_end = datetime.datetime.now()
 print(f'ended at {time_end}')
