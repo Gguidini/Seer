@@ -57,7 +57,13 @@ function Simulator( { details, steps, user } ) {
           var cell = model.getCell(ent)
           var {x, y, width, height, value, style} = currStep[ent]
           var cleanValue = value ? value.match(/>(.*)</) : ''
-
+          
+          if(ent === 'deleted') {
+            const remove = model.getCell(currStep[ent][0]);
+            remove.style = "display:none;"
+          
+          }
+          
           if (cell) {
             // Entity already there, just update
             cell.geometry.x = x
