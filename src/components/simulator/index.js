@@ -39,42 +39,25 @@ function Simulator( { details, steps, user } ) {
       const parent = graph?.getDefaultParent();
       updateTimestamp(currStep?.timestamp)
       model.beginUpdate()
-      if(step === 0){
-        for (const idx in currStep) {
-          const objeto = Object.entries(currStep[idx]);
+  
+      for (const ent in currStep) {
+        if(step === 0){
+          const objeto = Object.entries(currStep[ent]);
           const aux = objeto[0];
 
           if(aux[0] === 'timestamp') continue
 
-          const cell = model.getCell(aux[0])
-          const {x, y, width, height, value, style} = aux[1]
+          const {x, y, width, height, value, style} = aux[1];
           const cleanValue = value ? value.match(/>(.*)</) : ''
-          if (cell) {
-            // Entity already there, just update
-            cell.geometry.x = x
-            cell.geometry.y = y
-            cell.geometry.width = width
-            cell.geometry.height = height
-            cell.value = cleanValue ? cleanValue[1] : value
-            style.startsWith('ellipse') ? cell.style = "shape=" + style   : cell.style = style
-          } else {
-            graph.insertVertex(parent, aux[0], cleanValue ? cleanValue[1] : value, x, y, width, height, style.startsWith('ellipse') ? "shape=" + style   : style)
-          }
 
-        }
-      }
-      else {
-        for (const ent in currStep) {
+          graph.insertVertex(parent, aux[0], cleanValue ? cleanValue[1] : value, x, y, width, height, style?.startsWith('ellipse') ? "shape=" + style   : style)
+        } else {
+
           if(!currStep.hasOwnProperty(ent) || ent === 'timestamp') continue
-          const cell = model.getCell(ent)
-          const {x, y, width, height, value, style} = currStep[ent]
-          const cleanValue = value ? value.match(/>(.*)</) : ''
-          if(ent === 'deleted') {
+          var cell = model.getCell(ent)
+          var {x, y, width, height, value, style} = currStep[ent]
+          var cleanValue = value ? value.match(/>(.*)</) : ''
 
-              const remove = model.getCell(currStep[ent][0]);
-              remove.style = "display:none;"
-            
-          }
           if (cell) {
             // Entity already there, just update
             cell.geometry.x = x
@@ -82,9 +65,9 @@ function Simulator( { details, steps, user } ) {
             cell.geometry.width = width
             cell.geometry.height = height
             cell.value = cleanValue ? cleanValue[1] : value
-            style.startsWith('ellipse') ? cell.style = "shape=" + style   : cell.style = style
+            style?.startsWith('ellipse') ? cell.style = "shape=" + style : cell.style = style
           } else {
-            graph.insertVertex(parent, ent, cleanValue ? cleanValue[1] : value, x, y, width, height, style.startsWith('ellipse') ? "shape=" + style   : style)
+            graph.insertVertex(parent, ent, cleanValue ? cleanValue[1] : value, x, y, width, height, style?.startsWith('ellipse') ? "shape=" + style   : style)
           }
         }
       }
