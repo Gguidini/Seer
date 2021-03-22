@@ -56,9 +56,9 @@ function Simulator( { details, steps, user } ) {
             cell.geometry.width = width
             cell.geometry.height = height
             cell.value = cleanValue ? cleanValue[1] : value
-            cell.style = style
+            style.startsWith('ellipse') ? cell.style = "shape=" + style   : cell.style = style
           } else {
-            graph.insertVertex(parent, aux[0], cleanValue ? cleanValue[1] : value, x, y, width, height, style)
+            graph.insertVertex(parent, aux[0], cleanValue ? cleanValue[1] : value, x, y, width, height, style.startsWith('ellipse') ? "shape=" + style   : style)
           }
 
         }
@@ -82,9 +82,9 @@ function Simulator( { details, steps, user } ) {
             cell.geometry.width = width
             cell.geometry.height = height
             cell.value = cleanValue ? cleanValue[1] : value
-            cell.style = style
+            style.startsWith('ellipse') ? cell.style = "shape=" + style   : cell.style = style
           } else {
-            graph.insertVertex(parent, ent, cleanValue ? cleanValue[1] : value, x, y, width, height, style)
+            graph.insertVertex(parent, ent, cleanValue ? cleanValue[1] : value, x, y, width, height, style.startsWith('ellipse') ? "shape=" + style   : style)
           }
         }
       }
