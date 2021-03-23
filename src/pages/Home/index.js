@@ -1,4 +1,4 @@
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import { FormControl, Tabs, Tab, InputLabel, MenuItem, Select } from '@material-ui/core';
 import Simulator from '../../components/simulator';
 import TabPanel from '../../components/TabPanel';
 import firebase from '../../services/firebase';
@@ -52,18 +52,23 @@ function Home() {
         <h1>Simulador</h1>
         {usersList.length !== 0 && (
           <>
-          <b>Usuário:</b>
-          <select defaultValue={'DEFAULT'} onChange={event => setUser(event.target.value)}>
-          <option value="DEFAULT" disabled>Selecione um usuário ...</option>
-          {usersList.map(item => (
-            <option
-              key={item}
-              value={item}
+          <FormControl>
+            <InputLabel>Selecione um usuário...</InputLabel>
+            <Select
+              className="select-field"
+              value={user}
+              onChange={event => setUser(event.target.value)}
             >
-              {item}
-            </option>
-          ))}
-          </select>
+              {usersList.map(item => (
+                <MenuItem
+                  key={item}
+                  value={item}
+                >
+                  {item}
+                  </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           {user !== '' && (
             <div className="tabs">
               <Tabs value={tab} onChange={(e, n) => setTab(n)}>

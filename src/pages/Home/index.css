@@ -21,3 +21,7 @@
   padding-left: 50px;
   background-color: #f6f4f4;
 }
+
+.select-field {
+  min-width: 250px;
+}
