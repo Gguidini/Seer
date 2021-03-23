@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 import Simulator from '../../components/simulator';
+import TabPanel from '../../components/TabPanel';
 import firebase from '../../services/firebase';
+import { useEffect, useState } from 'react';
 import './index.css';
+import LogsTab from '../../components/logsTab';
+
 
 function Home() {
   const [details, setDetails] = useState();
   const [steps, setSteps] = useState([]);
   const [user, setUser] = useState('');
   const [usersList, setUsersList] = useState([]);
+  const [tab, setTab] = useState(0);
 
 
   useEffect(() => {
@@ -59,7 +64,20 @@ function Home() {
             </option>
           ))}
           </select>
-          <Simulator details={details} steps={steps} user={user}/>
+          {user !== '' && (
+            <div className="tabs">
+              <Tabs value={tab} onChange={(e, n) => setTab(n)}>
+                <Tab label="Simulação" value={0} />
+                <Tab label="Logs" value={1} />
+              </Tabs>
+              <TabPanel value={tab} index={0}>
+                <Simulator details={details} steps={steps} user={user}/>
+              </TabPanel>
+              <TabPanel value={tab} index={1}>
+                <LogsTab/>
+              </TabPanel>
+            </div>
+          )}
           </>
         )}
       </header>

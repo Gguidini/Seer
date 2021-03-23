@@ -12,3 +12,12 @@
   font-size: calc(10px + 2vmin);
   color: rgb(0, 0, 0);
 }
+
+.tabs {
+  min-height: 600px;
+  min-width: 600px;
+  margin-top: 15px;
+  padding-right: 50px;
+  padding-left: 50px;
+  background-color: #f6f4f4;
+}
