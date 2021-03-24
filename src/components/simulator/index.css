@@ -29,3 +29,8 @@
 .control.reset {
   font-size: 20px;
 }
+
+.mxTooltip {
+  position: absolute;
+  background-color: #f6f4f4;
+}
