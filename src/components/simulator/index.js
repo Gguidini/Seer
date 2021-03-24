@@ -1,4 +1,4 @@
-import { FaFastForward, FaFastBackward, FaStepForward, FaStepBackward, FaPlayCircle, FaStopCircle } from 'react-icons/fa'
+import { FaFastForward, FaFastBackward, FaStepForward, FaStepBackward, FaPlayCircle, FaStopCircle, FaRedoAlt} from 'react-icons/fa'
 
 import factory from 'mxgraph'
 import { useEffect, useState } from 'react'
@@ -111,8 +111,9 @@ function Simulator( { details, steps, user } ) {
       
       if(graph === undefined) {
         graph = new mx.mxGraph(container)
-        graph.setPanning(true);
+        graph.setEnabled(false);
         graph.setTooltips(true);
+        new mx.mxCellTracker(graph, '#00FF00');
         // Custom tooltip for cells
         graph.getTooltipForCell = function(cell) {
           return `Position: (${cell.geometry.x}, ${cell.geometry.y})`
@@ -177,6 +178,14 @@ function Simulator( { details, steps, user } ) {
         onClick={() => updateStep(step => step + 10)}
         >
         <FaFastForward />
+      </button>
+      <br/>
+      <button 
+        className="control reset"
+        disabled={step === 0 || step === -1}
+        onClick={() => updateStep(0)}
+        >
+        <FaRedoAlt />
       </button>
 
       <div id="mxContainer" />
