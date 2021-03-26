@@ -1,4 +1,5 @@
 import { FaFastForward, FaFastBackward, FaStepForward, FaStepBackward, FaPlayCircle, FaStopCircle, FaRedoAlt} from 'react-icons/fa'
+import { TextField, InputAdornment } from '@material-ui/core';
 
 import factory from 'mxgraph'
 import { useEffect, useState } from 'react'
@@ -26,6 +27,7 @@ function Simulator( { details, steps, user } ) {
   const [maxStep, updateMaxStep] = useState(0)
   const [running, updateRunning] = useState(false)
   const [playInterval, updatePlayInterval] = useState(undefined)
+  const [speed, setSpeed] = useState(200);
 
   useEffect(() => {
     updateStep(-1);
@@ -129,10 +131,10 @@ function Simulator( { details, steps, user } ) {
       clearInterval(playInterval);
       updatePlayInterval(undefined);
     } else if(playInterval === undefined) {
-      updatePlayInterval(setInterval(() => updateStep(step => step + 1), 200))
+      updatePlayInterval(setInterval(() => updateStep(step => step + 1), speed))
     }
     return () => clearInterval(playInterval)
-  }, [running, playInterval])
+  }, [running, playInterval, speed])
 
   return (
   <div id="Simulator">
@@ -140,6 +142,21 @@ function Simulator( { details, steps, user } ) {
         {title}
       </h2>
       <p>TimeStamp: {timestamp} • Step: {step}/{maxStep}</p>
+      <TextField className="speed" 
+        label="Intervalo entre os passos"
+        variant="outlined" 
+        type="number"
+        inputProps={{
+          step: 100,
+        }}
+        InputProps={{
+          endAdornment: <InputAdornment position="start">ms</InputAdornment>,
+        }}
+        value={speed} 
+        onChange={e => setSpeed(e.target.value)}
+      />
+      <br/>
+      <br/>
       <button 
         className="control"
         disabled={step-10 < 0}
