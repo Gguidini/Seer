@@ -13,6 +13,7 @@ function Home() {
   const [user, setUser] = useState('');
   const [usersList, setUsersList] = useState([]);
   const [tab, setTab] = useState(0);
+  const [logs, setLogs] = useState([]);
 
 
   useEffect(() => {
@@ -39,6 +40,21 @@ function Home() {
         const data = snapshot.val()? snapshot.val() : [undefined, []];
         setDetails(data[0]);
         setSteps(data.slice(1))
+      }
+    })
+
+    return () => listener();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firebase, user]);
+
+  useEffect(() => {
+    const logs = firebase.database().ref(`${user}/logs/`);
+
+    const listener = logs.on('value', (snapshot) => {
+      if(snapshot === undefined) return;
+      if(snapshot.ref.path.pieces_[0] === user){
+        const data = snapshot.val()? snapshot.val() : [];
+        setLogs(data);
       }
     })
 
@@ -73,13 +89,15 @@ function Home() {
             <div className="tabs">
               <Tabs value={tab} onChange={(e, n) => setTab(n)}>
                 <Tab label="Simulação" value={0} />
-                <Tab label="Logs" value={1} />
+                {logs.length !== 0 && (
+                  <Tab label="Logs" value={1} />
+                )}
               </Tabs>
               <TabPanel value={tab} index={0}>
                 <Simulator details={details} steps={steps} user={user}/>
               </TabPanel>
               <TabPanel value={tab} index={1}>
-                <LogsTab/>
+                <LogsTab logs={logs} />
               </TabPanel>
             </div>
           )}

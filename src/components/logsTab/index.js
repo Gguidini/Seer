@@ -1,9 +1,16 @@
-function LogsTab() {
-  const x = "oi";
+
+import './index.css';
+
+function LogsTab({ logs }) {
 
   return (
-    <div>
-      <h1>{x}</h1>
+    <div className="logs-tab">
+      {logs.map((log, idx) => (
+        <>
+          <code>{idx+1}. {log}</code>
+          <br/>
+        </>
+      ))}
     </div>
   )
 }
