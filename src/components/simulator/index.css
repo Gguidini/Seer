@@ -1,0 +1,40 @@
+#mxContainer {
+  overflow: auto;
+  margin: 32px;
+  border: 1px solid black;
+}
+
+#Simulator {
+  text-align: center;
+}
+
+.control {
+  border: none;
+  text-decoration: none;
+  color: blue;
+  font-size: 32px;
+  background-color: transparent;
+  text-align: center;
+  padding: 4px;
+}
+
+.control:hover {
+  color: red;
+}
+
+.control:disabled {
+  color: gray;
+}
+
+.control.reset {
+  font-size: 20px;
+}
+
+.mxTooltip {
+  position: absolute;
+  background-color: #f6f4f4;
+}
+
+.speed {
+  width: 200px;
+}
