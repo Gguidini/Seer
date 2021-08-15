@@ -1,8 +1,8 @@
 import { FormControl, Tabs, Tab, InputLabel, MenuItem, Select } from '@material-ui/core';
 import Simulator from '../../components/simulator';
 import TabPanel from '../../components/TabPanel';
-import firebase from '../../services/firebase';
 import { useEffect, useState } from 'react';
+import fire_database from '../../services/firebase';
 import './index.css';
 import LogsTab from '../../components/logsTab';
 
@@ -17,56 +17,57 @@ function Home() {
 
 
   useEffect(() => {
-    const root = firebase.database().ref()
-    const u = root.on('value', (snapshot) => {
-      if(snapshot === undefined) return;
-      const data = snapshot.val()? snapshot.val() : [];
-      let list = []
-      for(const u in data) {
-        list.push(u);
-      }
-      setUsersList(list)
-    })
-    return () => u();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firebase]);
+      const root = fire_database().ref()
+      const u = root.on('value', (snapshot) => {
+        if(snapshot === undefined) return;
+        const data = snapshot.val()? snapshot.val() : [];
+        let list = []
+        for(const u in data) {
+          list.push(u);
+        }
+        setUsersList(list)
+      })
+      return () => u();
+  }, []);
   
   useEffect(() => {
-    const live_report = firebase.database().ref(`${user}/live_report/`)
-        
-    const listener = live_report.on('value', (snapshot) => {
-      if(snapshot === undefined) return;
-      if(snapshot.ref.path.pieces_[0] === user){
-        const data = snapshot.val()? snapshot.val() : [undefined, []];
-        setDetails(data[0]);
-        setSteps(data.slice(1))
-      }
-    })
-
-    return () => listener();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firebase, user]);
+    if (user) {
+      const live_report = fire_database().ref(`${user}/live_report/`)
+          
+      const listener = live_report.on('value', (snapshot) => {
+        if(snapshot === undefined) return;
+        if(snapshot.ref.path.pieces_[0] === user){
+          const data = snapshot.val()? snapshot.val() : [undefined, []];
+          setDetails(data[0]);
+          setSteps(data.slice(1))
+        }
+      })
+  
+      return () => listener();
+    }
+  }, [user]);
 
   useEffect(() => {
-    const logs = firebase.database().ref(`${user}/logs/`);
-
-    const listener = logs.on('value', (snapshot) => {
-      if(snapshot === undefined) return;
-      if(snapshot.ref.path.pieces_[0] === user){
-        const data = snapshot.val()? snapshot.val() : [];
-        setLogs(data);
-      }
-    })
-
-    return () => listener();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firebase, user]);
+    if (user) {
+      const logs = fire_database().ref(`${user}/logs/`);
+  
+      const listener = logs.on('value', (snapshot) => {
+        if(snapshot === undefined) return;
+        if(snapshot.ref.path.pieces_[0] === user){
+          const data = snapshot.val()? snapshot.val() : [];
+          setLogs(data);
+        }
+      })
+  
+      return () => listener();
+    }
+  }, [user]);
 
   return (
     <div className="Home">
       <header className="Home-header">
         <h1>Simulador</h1>
-        {usersList.length !== 0 && (
+        {usersList.length > 0 && (
           <>
           <FormControl>
             <InputLabel>Selecione um usuário...</InputLabel>
@@ -85,7 +86,7 @@ function Home() {
               ))}
             </Select>
           </FormControl>
-          {user !== '' && (
+          {user && (
             <div className="tabs">
               <Tabs value={tab} onChange={(e, n) => setTab(n)}>
                 <Tab label="Simulação" value={0} />
