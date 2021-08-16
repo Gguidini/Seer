@@ -2,7 +2,7 @@ import { FormControl, Tabs, Tab, InputLabel, MenuItem, Select } from '@material-
 import Simulator from '../../components/simulator';
 import TabPanel from '../../components/TabPanel';
 import { useEffect, useState } from 'react';
-import fire_database from '../../services/firebase';
+import fire_database, { isFromUser } from '../../services/firebase';
 import './index.css';
 import LogsTab from '../../components/logsTab';
 
@@ -36,7 +36,7 @@ function Home() {
           
       const listener = live_report.on('value', (snapshot) => {
         if(snapshot === undefined) return;
-        if(snapshot.ref.path.pieces_[0] === user){
+        if(isFromUser(snapshot.ref, user)){
           const data = snapshot.val()? snapshot.val() : [undefined, []];
           setDetails(data[0]);
           setSteps(data.slice(1))
@@ -53,7 +53,7 @@ function Home() {
   
       const listener = logs.on('value', (snapshot) => {
         if(snapshot === undefined) return;
-        if(snapshot.ref.path.pieces_[0] === user){
+        if(isFromUser(snapshot.ref, user)){
           const data = snapshot.val()? snapshot.val() : [];
           setLogs(data);
         }

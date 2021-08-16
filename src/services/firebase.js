@@ -14,4 +14,11 @@ export const firebaseDemoConfig = {
 
 export const initializeFirebaseConnection = (firebaseConfig) => firebaseConfig && firebase.initializeApp(firebaseConfig)
 
+export const isFromUser = (ref, user) => {
+  if (ref.path) {
+    return ref.path.pieces_[0] === user
+  }
+  const x = ref.toString().replace('https://', '')
+  return x.substring(x.indexOf('/') + 1, x.lastIndexOf('/')) === user
+}
 export default firebase.database
