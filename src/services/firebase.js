@@ -21,4 +21,5 @@ export const isFromUser = (ref, user) => {
   const x = ref.toString().replace('https://', '')
   return x.substring(x.indexOf('/') + 1, x.lastIndexOf('/')) === user
 }
+
 export default firebase.database

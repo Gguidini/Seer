@@ -1,7 +1,6 @@
 import { useHistory, useLocation } from "react-router-dom";
 import { useAuth } from '../../context/useAuth';
 import { makeStyles } from '@material-ui/core/styles';
-import LockOpenIcon from '@material-ui/icons/LockOpen'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useState } from "react";
@@ -14,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
-            width: '500px;',
+            width: '600px;',
             fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;"
         },
     },
@@ -29,6 +28,7 @@ function Connect() {
     let location = useLocation();
     let auth = useAuth();
 
+    const [err, setErr] = useState(null)
     const [value, setValue] = useState(`
     {
         "apiKey": "value",
@@ -51,19 +51,20 @@ function Connect() {
         try {
             const obj = JSON.parse(value)
             if (obj && typeof obj === "object") {
-                login(obj)
+                return login(obj)
             }
         } catch(e) {
-
         }
-        
+        setErr('Erro parsing JSON.')
     }
 
     return (
     <div className="Connect">
         <h2>Coloque suas credenciais do Firebase ou use o demo.</h2>
         <form className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+        <p>{err}</p>
         <TextField
+            error={err}
             id="outlined-multiline-static"
             label="Firebase config"
             multiline
@@ -78,9 +79,8 @@ function Connect() {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                endIcon={<LockOpenIcon />}
                 type="submit">
-                    Submit
+                    Config
             </Button>
             <Button 
                 variant="outlined"
